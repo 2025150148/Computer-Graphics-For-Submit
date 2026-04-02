@@ -203,13 +203,10 @@ async function main() {
         if (!initWebGL()) {
             throw new Error('WebGL 초기화 실패');
         }
-
-        finalTransform = mat4.create();
         
         await initShader();
 
         setupBuffers();
-        axes = new Axes(gl, 0.8); 
 
         return true;
     } catch (error) {
