@@ -140,8 +140,6 @@ function setupBuffers() {
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    axes.draw(mat4.create(), mat4.create());
-
     shader.use();
     gl.bindVertexArray(vao);
 
