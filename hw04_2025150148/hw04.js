@@ -247,7 +247,7 @@ function animate(currentTime) {
     // deltaTime: 이전 frame에서부터의 elapsed time (in seconds)
     let deltaTime = (currentTime - lastTime) / 1000;
     rotationAngle1 = Math.PI * Math.sin(deltaTime) * 2;
-    rotationAngle2 = Math.PI * Math.sin(deltaTime) * 10;
+    rotationAngle2 = Math.PI * Math.sin(deltaTime) * -10;
     render();
     requestAnimationFrame(animate);
 }
