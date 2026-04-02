@@ -136,67 +136,7 @@ function setupBuffers() {
     gl.bindVertexArray(null);
 }
 
-function setupKeyboardEvents() {
-    let key;
-    document.addEventListener('keydown', (event) => {
-        key = event.key;
-        switch(key) {
-            case '1': currentTransformType = 'TRS'; isAnimating = true; break;
-            case '2': currentTransformType = 'TSR'; isAnimating = true; break;
-            case '3': currentTransformType = 'RTS'; isAnimating = true; break;
-            case '4': currentTransformType = 'RST'; isAnimating = true; break;
-            case '5': currentTransformType = 'STR'; isAnimating = true; break;
-            case '6': currentTransformType = 'SRT'; isAnimating = true; break;
-            case '7':
-                currentTransformType = null;
-                isAnimating = false;
-                rotationAngle = 0;
-                finalTransform = mat4.create();
-                break;
-        }
-        if (currentTransformType) {
-            updateText(textOverlay, event.key + ': ' + currentTransformType);
-        } else {
-            updateText(textOverlay, 'NO TRANSFORMA1TION');
-        }
-    });
-}
 
-function getTransformMatrices() {
-    const T = mat4.create();
-    const R = mat4.create();
-    const S = mat4.create();
-    
-    mat4.translate(T, T, [0.5, 0.5, 0]);  // translation by (0.5, 0.5)
-    mat4.rotate(R, R, rotationAngle, [0, 0, 1]); // rotation about z-axis
-    mat4.scale(S, S, [0.3, 0.3, 1]); // scale by (0.3, 0.3)
-    
-    return { T, R, S };
-}
-
-function applyTransform(type) {
-    finalTransform = mat4.create();
-    const { T, R, S } = getTransformMatrices();
-    
-    const transformOrder = {
-        'TRS': [T, R, S],
-        'TSR': [T, S, R],
-        'RTS': [R, T, S],
-        'RST': [R, S, T],
-        'STR': [S, T, R],
-        'SRT': [S, R, T]
-    };
-
-    /*
-      type은 'TRS', 'TSR', 'RTS', 'RST', 'STR', 'SRT' 중 하나
-      array.forEach(...) : 각 type의 element T or R or S 에 대해 반복
-    */
-    if (transformOrder[type]) {
-        transformOrder[type].forEach(matrix => {
-            mat4.multiply(finalTransform, matrix, finalTransform);
-        });
-    }
-}
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -270,11 +210,6 @@ async function main() {
 
         setupBuffers();
         axes = new Axes(gl, 0.8); 
-
-        textOverlay = setupText(canvas, 'NO TRANSFORMATION', 1);
-        setupText(canvas, 'press 1~7 to apply different order of transformations', 2);
-
-        setupKeyboardEvents();
 
         return true;
     } catch (error) {
